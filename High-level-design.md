@@ -256,7 +256,7 @@ There are currently three types of `CoinJoinerPeer`:
 2. `Taker`
 3. `Maker`
 
-`OrderbookWatch` does not participate in the Joinmarket protocol, but is an abstraction to allow observation of the Joinmarket pit. It stores order information in a sqlite3 db object.
+`OrderbookWatch` does not participate in the Joinmarket protocol, but is an abstraction to allow observation of the Joinmarket pit. It stores order information in an sqlite3 db object.
 
 `Taker` extends from `OrderbookWatch`, inheriting the db object for querying orders in the joinmarket pit, allowing the taker to make decisions about which orders to fill. Maker inherits directly from `CoinJoinerPeer` since it does not need this information.
 
@@ -298,7 +298,7 @@ Once a request is received from a taker, the maker creates a new `CoinJoinOrder`
 
 ### The CoinJoinOrder object
 
-The `CoinJoinOrder` object is perhaps poorly named; it manages the process of negotiating a single transaction with a taker for this maker, once a order fill request has been received. See [here](https://github.com/Joinmarket-Org/joinmarket-docs/blob/master/encryption_protocol.txt) for the steps of negotiation.
+The `CoinJoinOrder` object is perhaps poorly named; it manages the process of negotiating a single transaction with a taker for this maker, once an order fill request has been received. See [here](https://github.com/Joinmarket-Org/joinmarket-docs/blob/master/encryption_protocol.txt) for the steps of negotiation.
 
 If the negotiation is successful from the maker's point of view, it will add a notification function to the list `txnotify_fun` in the `BlockchainInterface` instance, and thus register callbacks `unconfirm_callback` and `confirm_callback` for this transaction.
 
@@ -452,7 +452,7 @@ As mentioned in the section on [Entities](#entities), each participant in Joinma
 * Scalability
 * Censorship Resistance
 
-Note that the list does *not* include encryption, because E2E encryption technology (including authentication and message integrity) can be used as a layer over the messaging channel. Thus while use of TLS for connection to the messaging layer may be desirable, it isn't necessary.
+Note that the list does *not* include encryption, because E2E encryption technology (including authentication and message integrity) can be used as a layer over the messaging channel. Thus, while use of TLS for connection to the messaging layer may be desirable, it isn't necessary.
 
 Scalability is important due to the use of broadcast messages. It would be desirable to minimise this requirement; for example, using federated servers which publish orders out-of-band.
 
@@ -469,7 +469,7 @@ For the sake of privacy, it is required to end-to-end encrypt some part of the m
 
 The technology used for this purpose is Daniel J Bernstein's [NaCl](https://nacl.cr.yp.to/), which uses Curve25519 elliptic curve cryptography and the Salsa20 stream cipher, with Poly1305 as the MAC. The specific implementation of this is [libsodium](https://libsodium.org), with the Python binding [libnacl](https://libnacl.readthedocs.org/en/latest/).
 
-This was chosen for its wide usage, high reputation in the community and a design based on a philosophy of "a highly secure default with as few options as possible". The particularly functionality used from the library is [authenticated encryption](https://libnacl.readthedocs.org/en/latest/topics/public.html) using keys derived via [ECDH](https://en.wikipedia.org/wiki/Elliptic_curve_Diffie%E2%80%93Hellman). Note that nonces for encryption are chosen randomly per-message **by default** in libnacl. This is worthy of note as nonce-reuse would be a critical security weakness.
+This was chosen for its wide usage, high reputation in the community and a design based on a philosophy of "a highly secure default with as few options as possible". The particular functionality used from the library is [authenticated encryption](https://libnacl.readthedocs.org/en/latest/topics/public.html) using keys derived via [ECDH](https://en.wikipedia.org/wiki/Elliptic_curve_Diffie%E2%80%93Hellman). Note that nonces for encryption are chosen randomly per-message **by default** in libnacl. This is worthy of note as nonce-reuse would be a critical security weakness.
 
 For abstraction this functionality is exposed via a separate module in Joinmarket, `enc_wrapper.py` (this wrapper is currently entirely transparent).
 
